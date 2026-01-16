@@ -1,0 +1,23 @@
+/* ===== GLOBAL LAYOUT ===== */
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background:  #f0f2f5 url("https://www.toptal.com/designers/subtlepatterns/uploads/white-waves.png");
+    background-size: 600px;
+    text-align: center;
+    margin: 50px;
+}
+
+a {
+    display: inline-block;
+    margin: 10px;
+    background: #0d6efd;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+a:hover {
+    background: #0a58ca;
+}
+
+/* ===== TIP CALCULATOR CARDS ===== */
