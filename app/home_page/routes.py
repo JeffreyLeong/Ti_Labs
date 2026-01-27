@@ -1,10 +1,6 @@
-from flask import Blueprint
-
-home_page = Blueprint(
-    "home_page",
-     __name__,
-     )
+from flask import Blueprint, render_template
+from . import home_page
 
 @home_page.route("/")
 def index():
-    return "Welcome! Select from 'Tip Calculator', 'Expense Tracker', 'Car Maintenance'."
+    return render_template('base.html')
