@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Welcome to Ti Labs</h1>
+<p>Select a mini-site: </p>
+
+<div class = "menu">
+    <a href="{{ url_for('tip_calculator.index') }}">Tip Calculator</a>
+</div>
+
+{% endblock %}

@@ -1,7 +1,7 @@
 /* ===== GLOBAL LAYOUT ===== */
-body{
+body {
     font-family: 'Segoe UI', sans-serif;
-    background:  #f0f2f5 url("https://www.toptal.com/designers/subtlepatterns/uploads/white-waves.png");
+    background: #f0f2f5 url("https://www.toptal.com/designers/subtlepatterns/uploads/white-waves.png");
     background-size: 600px;
     text-align: center;
     margin: 50px;
@@ -10,14 +10,241 @@ body{
 a {
     display: inline-block;
     margin: 10px;
+    padding: 12px 20px;
     background: #0d6efd;
     color: white;
     text-decoration: none;
     border-radius: 8px;
 }
-
-a:hover {
-    background: #0a58ca;
-}
+a:hover { background: #0a58ca; }
 
 /* ===== TIP CALCULATOR CARDS ===== */
+.the-card {
+    width: 350px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+    background-color: white;
+    margin: 0 auto;
+}
+
+/* Inputs */
+.bill-input { margin-bottom: 20px; }
+.tip-input {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.button-row { margin-bottom: 20px; }
+.total-display { margin-bottom: 20px; }
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.result-row label {
+    width: 70px;
+    display: inline-block;
+    text-align: left;
+}
+
+.result-row p {
+    margin: 0;
+    text-align: right;
+}
+
+/* Presets */
+.tip-presets {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.preset {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.2s;
+}
+.preset:hover { background: #eaeaea; }
+.preset.active {
+    background: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+/* ===== CAR PAGE CARDS ===== */
+.records-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    margin-top: 25px;
+}
+
+.record-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+    text-align: left;
+}
+
+.home-btn {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 6px 10px;
+    background: #4e73df;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 14px;
+    background: #1cc88a;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+/* ============================
+   CAR MAINTENANCE — ADD FORM
+   ============================ */
+
+.add-form-wrapper {
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 18px;
+    text-align: left;
+}
+
+.add-form-wrapper h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.add-form-group {
+    margin-bottom: 18px;
+}
+
+.add-form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.add-form-group input,
+.add-form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccd4dd;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #f9fbfd;
+}
+
+.add-form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.add-form-buttons {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.add-form-buttons .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.cancel-btn {
+    background: #6c757d;
+    margin-left: 10px;
+}
+.cancel-btn:hover {
+    background: #5c636a;
+}
+
+/* ----- Add Record Form Styling ----- */
+
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 25px;
+}
+
+.nice-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.nice-form label {
+    font-weight: bold;
+}
+
+.nice-form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.btn-secondary {
+    background: #888;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #666;
+}
+
+.delete-btn {
+    background: #e74a3b;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+.center-nav {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.nav-link {
+    display: inline-block;
+    padding: 8px 14px;
+    background: #2d89ef;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    background: #1e5fbf;
+}
