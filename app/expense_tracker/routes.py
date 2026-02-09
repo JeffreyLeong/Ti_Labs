@@ -3,7 +3,7 @@ from flask import Blueprint
 expense_tracker = Blueprint(
     "expense_tracker",
     __name__,
-    url_prefix="/expense_tracker"
+    template_folder="templates",
 )
 
 @expense_tracker.route("/")

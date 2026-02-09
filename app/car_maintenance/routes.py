@@ -3,7 +3,7 @@ from flask import Blueprint
 car_maintenance = Blueprint(
     "car_maintenance",
     __name__,
-    url_prefix="/car_maintenance"
+    template_folder="templates",
 )
 
 @car_maintenance.route("/")

@@ -1,11 +1,11 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 tip_calculator = Blueprint(
     "tip_calculator",
     __name__,
-    url_prefix="/tip_calculator"
+    template_folder="templates",
 )
 
 @tip_calculator.route("/")
 def index():
-    return "Tip Calculator Home"
+    return render_template("tip_calculator.html")

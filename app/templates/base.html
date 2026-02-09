@@ -7,6 +7,9 @@
 <body>
     <nav>
         <a href="{{ url_for('home_page.index') }}">Home</a>
+        <a href="{{ url_for('tip_calculator.index') }}">Tip Calculator</a>
+        <a href="{{ url_for('car_maintenance.index') }}">Car Maintenance</a>
+        <a href="{{ url_for('expense_tracker.index') }}">Expense Tracker</a>
     </nav>
 
     {% block content %}{% endblock %}
