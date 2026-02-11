@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Transaction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="form-container">
+        <form class="nice-form" method="POST">
+            <h1>Add Transaction</h1>
+
+            <label for="date">Date:</label>
+            <input type="date" name="date" id="date" required>
+
+            <label for="description">Description:</label>
+            <input type="text" name="description" id="description" required>
+
+            <label for="amount">Amount:</label>
+            <input type="number" step="0.01" name="amount" id="amount" required>
+
+            <label for="category">Category:</label>
+            <input type="text" name="category" id="category" required>
+
+            <label for="type">Type:</label>
+            <select name="type" id="type" required>
+                <option value="">Select Type</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+                <option value="transfer">Transfer</option>
+            </select>
+
+            <div class="add-form-buttons">
+                <button class="btn" type="submit">Add Transaction</button>
+            </div>
+        </form>
+        <div class="center-nav">
+        <a class="nav-link" href="{{ url_for('expense_tracker.index') }}">Back to Expense Tracker</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
