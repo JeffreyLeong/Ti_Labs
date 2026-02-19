@@ -23,8 +23,8 @@ def add_record():
     date = datetime.strptime(data["date"], "%Y-%m-%d").date()
     description = data["description"].strip()
     amount = Decimal(data["amount"])
-    category = data.get["category", ""]
-    type_ = data["type"]
+    category = data.get("category", "")
+    type_ = data.get("type", "")
 
     new_tx = Transaction(
         date=date,

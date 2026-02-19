@@ -1,10 +1,13 @@
 from flask import Flask
 from app.extensions import db, migrate
 from app.config import Config
+from app.expense_tracker.routes import expense_tracker
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -18,7 +21,5 @@ def create_app():
     app.register_blueprint(car_maintenance, url_prefix="/car_maintenance")
     app.register_blueprint(expense_tracker, url_prefix="/expense_tracker")
     app.register_blueprint(tip_calculator, url_prefix="/tip_calculator")
-
-    
 
     return app
