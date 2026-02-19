@@ -9,7 +9,8 @@
         <a href="{{ url_for('home_page.index') }}">Home</a>
         <a href="{{ url_for('tip_calculator.index') }}">Tip Calculator</a>
         <a href="{{ url_for('car_maintenance.index') }}">Car Maintenance</a>
-        <a href="{{ url_for('expense_tracker.index') }}">Expense Tracker</a>
+        <a href="{{ url_for('expense_tracker.dashboard') }}">Expense Tracker</a>
+        <a href="{{ url_for('expense_tracker.view_all') }}" class="nav-link">View All Transactions</a>
     </nav>
 
     {% block content %}{% endblock %}

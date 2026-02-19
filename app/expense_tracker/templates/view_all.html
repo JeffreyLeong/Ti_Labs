@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>All Transactions</h1>
+
+<table border="1" style="width:80%; margin:0 auto;">
+    <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Type</th>
+    </tr>
+    {% for tx in transactions %}
+    <tr>
+        <td>{{ tx.date }}</td>
+        <td>{{ tx.description }}</td>
+        <td>${{ tx.amount }}</td>
+        <td>{{ tx.category }}</td>
+        <td>{{ tx.type }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
