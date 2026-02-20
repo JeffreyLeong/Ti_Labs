@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, jsonif
 from datetime import datetime
 from decimal import Decimal
 from app.extensions import db
-from .models import Transaction
+from .models import Transaction, Category
 
 expense_tracker = Blueprint(
     "expense_tracker",
@@ -13,38 +13,43 @@ expense_tracker = Blueprint(
 # Dashboard page
 @expense_tracker.route("/")
 def dashboard():
-    transactions = Transaction.query.order_by(Transaction.date.desc()).limit(10)
-    return render_template("dashboard.html", transactions=transactions)
+    transactions = Transaction.query.order_by(Transaction.date.desc()).all()
+    categories = Category.query.filter_by(active=True).order_by(Category.name).all()
+    return render_template(
+        "dashboard.html",
+        transactions=transactions,
+        categories=categories
+    )
+
 
 # Add transaction via AJAX
 @expense_tracker.route("/add", methods=["POST"])
 def add_record():
     data = request.json
-    date = datetime.strptime(data["date"], "%Y-%m-%d").date()
-    description = data["description"].strip()
-    amount = Decimal(data["amount"])
-    category = data.get("category", "")
-    type_ = data.get("type", "")
+    category = Category.query.get(data["category_id"])
+    if not category:
+        return jsonify({"error": "Invalid category"}), 400
 
-    new_tx = Transaction(
-        date=date,
-        description=description,
-        amount=amount,
-        category=category,
-        type=type_
+    tx = Transaction(
+        date=datetime.strptime(data["date"], "%Y-%m-%d"),
+        description=data["description"],
+        amount=float(data["amount"]),
+        type=data["type"],
+        category_id=category.id
     )
 
-    db.session.add(new_tx)
+    db.session.add(tx)
     db.session.commit()
 
     return jsonify({
-        "id": new_tx.id,
-        "date": str(new_tx.date),
-        "description": new_tx.description,
-        "amount": str(new_tx.amount),
-        "category": new_tx.category,
-        "type": new_tx.type
+        "id": tx.id,
+        "date": tx.date.strftime("%Y-%m-%d"),
+        "description": tx.description,
+        "amount": tx.amount,
+        "type": tx.type,
+        "category": category.name
     })
+
 
 # Delete transaction via AJAX
 @expense_tracker.route("/delete/<int:tx_id>", methods=["DELETE"])

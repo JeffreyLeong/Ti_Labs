@@ -6,11 +6,12 @@
 </head>
 <body>
     <nav>
-        <a href="{{ url_for('home_page.index') }}">Home</a>
-        <a href="{{ url_for('tip_calculator.index') }}">Tip Calculator</a>
-        <a href="{{ url_for('car_maintenance.index') }}">Car Maintenance</a>
-        <a href="{{ url_for('expense_tracker.dashboard') }}">Expense Tracker</a>
-        <a href="{{ url_for('expense_tracker.view_all') }}" class="nav-link">View All Transactions</a>
+        {% if request.endpoint != 'home_page.index' %}
+            <a href="{{ url_for('home_page.index') }}" class="btn">Home</a>
+        {% endif %}
+        <a href="{{ url_for('tip_calculator.index') }}" class="btn">Tip Calculator</a>
+        <a href="{{ url_for('car_maintenance.index') }}" class="btn">Car Maintenance</a>
+        <a href="{{ url_for('expense_tracker.dashboard') }}" class="btn">Expense Tracker</a>
     </nav>
 
     {% block content %}{% endblock %}
