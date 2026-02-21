@@ -21,6 +21,7 @@
 </div>
 
 <div id="add-form" class="form-container nice-form" style="display:none;">
+    <form id="addRecordForm">
     <h2>Add Transaction</h2>
 
     <div class="form-group">
@@ -40,7 +41,7 @@
 
     <div class="form-group">
         <label for="category">Category</label>
-        <select id="category">
+        <select id="category" required>
             <option value="">Select Category</option>
             {% for cat in categories %}
                 <option value="{{ cat.id }}">{{ cat.name }}</option>
@@ -51,6 +52,7 @@
     <div class="form-group">
         <label for="type">Type</label>
         <select id="type">
+            <option value="" selected>Select Type</option>
             <option value="Income">Income</option>
             <option value="Expense">Expense</option>
         </select>
@@ -60,6 +62,7 @@
         <button class="btn nav-link" id="submit-add">Submit</button>
         <button class="btn-secondary" id="cancel-add">Cancel</button>
     </div>
+</form>
 </div>
 
 <script>
@@ -74,7 +77,8 @@ showFormBtn.addEventListener("click", () => addForm.style.display = "block");
 cancelBtn.addEventListener("click", () => addForm.style.display = "none");
 
 // Submit New Transaction via AJAX
-submitBtn.addEventListener("click", () => {
+submitBtn.addEventListener("click", (event) => {
+    event.preventDefault();
     const data = {
         date: document.getElementById("date").value,
         description: document.getElementById("description").value,
@@ -82,6 +86,17 @@ submitBtn.addEventListener("click", () => {
         category_id: document.getElementById("category").value,
         type: document.getElementById("type").value
     };
+
+    // Frontend validation
+    if (!data.category_id) {
+        alert("Please select a category");
+        return;
+    }
+
+    if (!data.type) {
+        alery("please select a type");
+        return;
+    }
 
     fetch("{{ url_for('expense_tracker.add_record') }}", {
         method: "POST",
@@ -101,6 +116,9 @@ submitBtn.addEventListener("click", () => {
             <button class="delete-btn" data-id="${tx.id}">Delete</button>
         `;
         transactionsDiv.prepend(card);
+
+        document.getElementById("addRecordForm").reset();
+
         addForm.style.display = "none";
 
         card.querySelector(".delete-btn").addEventListener("click", deleteTransaction);

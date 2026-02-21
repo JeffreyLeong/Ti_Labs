@@ -16,7 +16,7 @@
         <td>{{ tx.date }}</td>
         <td>{{ tx.description }}</td>
         <td>${{ tx.amount }}</td>
-        <td>{{ tx.category }}</td>
+        <td>{{ tx.category_obj.name }}</td>
         <td>{{ tx.type }}</td>
     </tr>
     {% endfor %}

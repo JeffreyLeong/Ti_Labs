@@ -26,6 +26,14 @@ def dashboard():
 @expense_tracker.route("/add", methods=["POST"])
 def add_record():
     data = request.json
+
+    # Backend validation
+    if not data.get("category_id"):
+        return jsonify({"error": "Category is required"}), 400
+    
+    if not data.get("type"):
+        return jsonify({"error": "Type is required"}), 400
+
     category = Category.query.get(data["category_id"])
     if not category:
         return jsonify({"error": "Invalid category"}), 400
