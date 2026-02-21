@@ -1,44 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Transaction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
 
-    <div class="form-container">
-        <form class="nice-form" method="POST">
-            <h1>Add Transaction</h1>
+{% block content %}
+<div class="form-container">
+    <form method="POST" class="nice-form">
+        {{ form.hidden_tag() }}
+        <h1>Add Transaction</h1>
 
-            <label for="date">Date:</label>
-            <input type="date" name="date" id="date" required>
+        <p>
+            {{ form.date.label }}<br>
+            {{ form.date() }}
+        </p>
 
-            <label for="description">Description:</label>
-            <input type="text" name="description" id="description" required>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(size=50) }}
+        </p>
 
-            <label for="amount">Amount:</label>
-            <input type="number" step="0.01" name="amount" id="amount" required>
+        <p>
+            {{ form.amount.label }}<br>
+            {{ form.amount() }}
+        </p>
 
-            <label for="category">Category:</label>
-            <input type="text" name="category" id="category" required>
+        <p>
+            {{ form.category_id.label }}<br>
+            {{ form.category_id() }}
+        </p>
 
-            <label for="type">Type:</label>
-            <select name="type" id="type" required>
-                <option value="">Select Type</option>
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-                <option value="transfer">Transfer</option>
-            </select>
+        <p>
+            {{ form.type.label }}<br>
+            {{ form.type() }}
+        </p>
 
-            <div class="add-form-buttons">
-                <button class="btn" type="submit">Add Transaction</button>
-            </div>
-        </form>
-        <div class="center-nav">
-        <a class="nav-link" href="{{ url_for('expense_tracker.index') }}">Back to Expense Tracker</a>
-        </div>
+        <p>{{ form.submit(class_="btn") }}</p>
+    </form>
 
+    <div class="center-nav">
+        <a class="nav-link" href="{{ url_for('expense_tracker.dashboard') }}">Back to Expense Tracker</a>
     </div>
-
-</body>
-</html>
+</div>
+{% endblock %}

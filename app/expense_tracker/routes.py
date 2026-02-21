@@ -3,6 +3,7 @@ from datetime import datetime
 from decimal import Decimal
 from app.extensions import db
 from .models import Transaction, Category
+from .forms import TransactionForm
 
 expense_tracker = Blueprint(
     "expense_tracker",
@@ -73,3 +74,22 @@ def delete_record(tx_id):
 def view_all():
     transactions = Transaction.query.order_by(Transaction.date.desc()).all()
     return render_template("view_all.html", transactions=transactions)
+
+
+@expense_tracker.route("/add-form", methods=["GET", "POST"])
+def add_transaction():
+    form = TransactionForm()
+    
+    if form.validate_on_submit():
+        tx = Transaction(
+            date=form.date.data,
+            description=form.description.data,
+            amount=form.amount.data,
+            type=form.type.data,
+            category_id=form.category_id.data
+        )
+        db.session.add(tx)
+        db.session.commit()
+        return redirect(url_for("expense_tracker.dashboard"))
+    
+    return render_template("add_transaction.html", form=form)

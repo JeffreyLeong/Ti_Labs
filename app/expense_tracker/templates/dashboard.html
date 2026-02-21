@@ -9,7 +9,15 @@
         <p><strong>{{ tx.date }}</strong></p>
         <p>{{ tx.description }}</p>
         <p>${{ tx.amount }}</p>
-        <p>{{ tx.category_obj.name }} | {{ tx.type }}</p>
+        {% set type_color = "black" %}
+        {% if tx.type == "income" %}
+            {% set type_color = "green" %}
+        {% elif tx.type == "expense" %}
+            {% set type_color = "red" %}
+        {% elif tx.type == "transfer" %}
+            {% set type_color = "blue" %}
+        {% endif %}
+        <p style="color: {{ type_color }}">{{ tx.category_obj.name }} | {{ tx.type.capitalize() }}</p>
         <button class="delete-btn" data-id="{{ tx.id }}">Delete</button>
     </div>
     {% endfor %}
@@ -22,47 +30,48 @@
 
 <div id="add-form" class="form-container nice-form" style="display:none;">
     <form id="addRecordForm">
-    <h2>Add Transaction</h2>
+        <h2>Add Transaction</h2>
 
-    <div class="form-group">
-        <label for="date">Date</label>
-        <input type="date" id="date">
-    </div>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" required>
+        </div>
 
-    <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" id="description">
-    </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" required>
+        </div>
 
-    <div class="form-group">
-        <label for="amount">Amount</label>
-        <input type="number" step="0.01" id="amount">
-    </div>
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" step="0.01" min="0" id="amount" required>
+        </div>
 
-    <div class="form-group">
-        <label for="category">Category</label>
-        <select id="category" required>
-            <option value="">Select Category</option>
-            {% for cat in categories %}
-                <option value="{{ cat.id }}">{{ cat.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" required>
+                <option value="">Select Category</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label for="type">Type</label>
-        <select id="type">
-            <option value="" selected>Select Type</option>
-            <option value="Income">Income</option>
-            <option value="Expense">Expense</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select id="type" required>
+                <option value="">Select Type</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+                <option value="transfer">Transfer</option>
+            </select>
+        </div>
 
-    <div class="form-actions">
-        <button class="btn nav-link" id="submit-add">Submit</button>
-        <button class="btn-secondary" id="cancel-add">Cancel</button>
-    </div>
-</form>
+        <div class="form-actions">
+            <button class="btn nav-link" id="submit-add">Submit</button>
+            <button class="btn-secondary" id="cancel-add">Cancel</button>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -79,10 +88,11 @@ cancelBtn.addEventListener("click", () => addForm.style.display = "none");
 // Submit New Transaction via AJAX
 submitBtn.addEventListener("click", (event) => {
     event.preventDefault();
+
     const data = {
         date: document.getElementById("date").value,
         description: document.getElementById("description").value,
-        amount: document.getElementById("amount").value,
+        amount: parseFloat(document.getElementById("amount").value),
         category_id: document.getElementById("category").value,
         type: document.getElementById("type").value
     };
@@ -92,9 +102,8 @@ submitBtn.addEventListener("click", (event) => {
         alert("Please select a category");
         return;
     }
-
     if (!data.type) {
-        alery("please select a type");
+        alert("Please select a type");
         return;
     }
 
@@ -108,17 +117,21 @@ submitBtn.addEventListener("click", (event) => {
         const card = document.createElement("div");
         card.className = "record-card";
         card.id = "tx-" + tx.id;
+
+        // Color-code types
+        let typeColor = tx.type === "income" ? "green" : tx.type === "expense" ? "red" : "blue";
+        let typeCapitalized = tx.type.charAt(0).toUpperCase() + tx.type.slice(1);
+
         card.innerHTML = `
             <p><strong>${tx.date}</strong></p>
             <p>${tx.description}</p>
-            <p>$${tx.amount}</p>
-            <p>${tx.category} | ${tx.type}</p>
+            <p>$${tx.amount.toFixed(2)}</p>
+            <p style="color:${typeColor}">${tx.category} | ${typeCapitalized}</p>
             <button class="delete-btn" data-id="${tx.id}">Delete</button>
         `;
         transactionsDiv.prepend(card);
 
         document.getElementById("addRecordForm").reset();
-
         addForm.style.display = "none";
 
         card.querySelector(".delete-btn").addEventListener("click", deleteTransaction);
