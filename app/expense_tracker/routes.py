@@ -4,6 +4,7 @@ from decimal import Decimal
 from app.extensions import db
 from .models import Transaction, Category
 from .forms import TransactionForm
+from sqlalchemy import func, extract
 
 expense_tracker = Blueprint(
     "expense_tracker",
@@ -14,24 +15,81 @@ expense_tracker = Blueprint(
 # Dashboard page
 @expense_tracker.route("/")
 def dashboard():
-    transactions = Transaction.query.order_by(Transaction.date.desc()).all()
-    categories = Category.query.filter_by(active=True).order_by(Category.name).all()
+    now = datetime.now()
+    year = now.year
+
+    # Get selected month from query param, default to current month
+    month = request.args.get("month", default=now.month, type=int)
+
+    monthly_budget = 4000  # hardcoded
+
+    # YTD totals
+    ytd_income = db.session.query(func.sum(Transaction.amount))\
+        .filter(Transaction.type == "income")\
+        .filter(extract('year', Transaction.date) == year)\
+        .scalar() or 0
+
+    ytd_expense = db.session.query(func.sum(Transaction.amount))\
+        .filter(Transaction.type == "expense")\
+        .filter(extract('year', Transaction.date) == year)\
+        .scalar() or 0
+
+    ytd_savings = db.session.query(func.sum(Transaction.amount))\
+        .filter(Transaction.type == "transfer")\
+        .filter(extract('year', Transaction.date) == year)\
+        .scalar() or 0
+
+    net_ytd = ytd_income - ytd_expense
+    savings_rate = round((ytd_savings / ytd_income * 100), 1) if ytd_income else 0
+
+    # Current month totals
+    current_month_expense = db.session.query(func.sum(Transaction.amount))\
+        .filter(Transaction.type == "expense")\
+        .filter(extract('year', Transaction.date) == year)\
+        .filter(extract('month', Transaction.date) == month)\
+        .scalar() or 0
+
+    # Category breakdown for selected month
+    category_totals = db.session.query(
+        Category.name,
+        func.sum(Transaction.amount)
+    ).join(Transaction)\
+     .filter(Transaction.type == "expense")\
+     .filter(extract('year', Transaction.date) == year)\
+     .filter(extract('month', Transaction.date) == month)\
+     .group_by(Category.name)\
+     .all()
+    
+    categories = Category.query.order_by(Category.name).all()
+
+    budget_percentage = min(
+        (current_month_expense / monthly_budget * 100),
+        100
+    ) if monthly_budget else 0
+
     return render_template(
         "dashboard.html",
-        transactions=transactions,
-        categories=categories
+        ytd_income=ytd_income,
+        ytd_expense=ytd_expense,
+        ytd_savings=ytd_savings,
+        savings_rate=savings_rate,
+        net_ytd=net_ytd,
+        current_month_expense=current_month_expense,
+        monthly_budget=monthly_budget,
+        category_totals=category_totals,
+        categories=categories,
+        budget_percentage=budget_percentage,
+        selected_month=month
     )
-
 
 # Add transaction via AJAX
 @expense_tracker.route("/add", methods=["POST"])
 def add_record():
     data = request.json
 
-    # Backend validation
     if not data.get("category_id"):
         return jsonify({"error": "Category is required"}), 400
-    
+
     if not data.get("type"):
         return jsonify({"error": "Type is required"}), 400
 
@@ -42,7 +100,7 @@ def add_record():
     tx = Transaction(
         date=datetime.strptime(data["date"], "%Y-%m-%d"),
         description=data["description"],
-        amount=float(data["amount"]),
+        amount=Decimal(str(data["amount"])),
         type=data["type"],
         category_id=category.id
     )
@@ -54,7 +112,7 @@ def add_record():
         "id": tx.id,
         "date": tx.date.strftime("%Y-%m-%d"),
         "description": tx.description,
-        "amount": tx.amount,
+        "amount": float(tx.amount),
         "type": tx.type,
         "category": category.name
     })
@@ -70,6 +128,7 @@ def delete_record(tx_id):
         return jsonify({"success": True})
     return jsonify({"success": False}), 404
 
+
 @expense_tracker.route("/all")
 def view_all():
     transactions = Transaction.query.order_by(Transaction.date.desc()).all()
@@ -79,7 +138,7 @@ def view_all():
 @expense_tracker.route("/add-form", methods=["GET", "POST"])
 def add_transaction():
     form = TransactionForm()
-    
+
     if form.validate_on_submit():
         tx = Transaction(
             date=form.date.data,
@@ -91,5 +150,5 @@ def add_transaction():
         db.session.add(tx)
         db.session.commit()
         return redirect(url_for("expense_tracker.dashboard"))
-    
+
     return render_template("add_transaction.html", form=form)
