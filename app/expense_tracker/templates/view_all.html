@@ -2,7 +2,6 @@
 
 {% block content %}
 <h1>All Transactions</h1>
-
 <table border="1" style="width:80%; margin:0 auto;">
     <tr>
         <th>Date</th>
@@ -10,15 +9,31 @@
         <th>Amount</th>
         <th>Category</th>
         <th>Type</th>
+        <th>Actions</th>
     </tr>
     {% for tx in transactions %}
     <tr>
-        <td>{{ tx.date }}</td>
+        <td>{{ tx.date.strftime('%Y-%m-%d') }}</td>
         <td>{{ tx.description }}</td>
         <td>${{ tx.amount }}</td>
         <td>{{ tx.category_obj.name }}</td>
         <td>{{ tx.type }}</td>
+        <td>
+            <a href="{{ url_for('expense_tracker.edit_record', tx_id=tx.id) }}">
+                Edit
+            </a>
+
+            <form action="{{ url_for('expense_tracker.delete_record', tx_id=tx.id) }}"
+                  method="POST"
+                  style="display:inline;">
+                <button type="submit"
+                        onclick="return confirm('Delete this transaction?');">
+                    Delete
+                </button>
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>
+
 {% endblock %}

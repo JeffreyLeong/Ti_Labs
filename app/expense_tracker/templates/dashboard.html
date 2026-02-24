@@ -151,6 +151,9 @@ cancelBtn.addEventListener("click", () => addForm.style.display = "none");
 
 submitBtn.addEventListener("click", (event) => {
     event.preventDefault();
+
+    const form = document.getElementById("addRecordForm");
+
     const data = {
         date: document.getElementById("date").value,
         description: document.getElementById("description").value,
@@ -158,11 +161,18 @@ submitBtn.addEventListener("click", (event) => {
         category_id: document.getElementById("category").value,
         type: document.getElementById("type").value
     };
+
     fetch("{{ url_for('expense_tracker.add_record') }}", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
-    }).then(res => res.json()).then(() => window.location.reload());
+    })
+    .then(res => res.json())
+    .then(() => {
+        form.reset();
+        addForm.style.display = "none";
+        window.location.replace(window.location.pathname + window.location.search);
+    });
 });
 </script>
 {% endblock %}

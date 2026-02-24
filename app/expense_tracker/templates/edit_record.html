@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Transaction</h1>
+
+<div class="the-card">
+    <form method="POST">
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" value="{{ tx.date.strftime('%Y-%m-%d') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" value="{{ tx.description }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" step="0.01" min="0" id="amount" name="amount" value="{{ tx.amount }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if tx.category_id == cat.id %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select id="type" name="type" required>
+                <option value="income" {% if tx.type == "income" %}selected{% endif %}>Income</option>
+                <option value="expense" {% if tx.type == "expense" %}selected{% endif %}>Expense</option>
+                <option value="transfer" {% if tx.type == "transfer" %}selected{% endif %}>Transfer</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn">Update Transaction</button>
+            <a href="{{ url_for('expense_tracker.view_all') }}" class="btn">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

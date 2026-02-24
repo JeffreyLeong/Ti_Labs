@@ -301,6 +301,35 @@ a:hover { background: #0a58ca; }
     text-align: center;
 }
 
+/* Modal form spacing */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.form-group label {
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+/* Modal action button spacing */
+.form-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
 /* =========================
    RESPONSIVE
 ========================= */
@@ -313,7 +342,7 @@ a:hover { background: #0a58ca; }
     .dashboard-grid { grid-template-columns: 1fr; }
     .budget-bar-container { width: 90%; }
     .center-nav-wrapper, .dashboard-nav-wrapper { flex-direction: column; gap: 10px; max-width: 90%; }
-    .modal-content { margin: 20% auto; padding: 20px; }
+    .modal-content { margin: 20% auto; padding: 35px; }
 }
 
 @media (max-width: 480px) {

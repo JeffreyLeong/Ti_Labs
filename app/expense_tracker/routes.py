@@ -27,17 +27,17 @@ def dashboard():
     ytd_income = db.session.query(func.sum(Transaction.amount))\
         .filter(Transaction.type == "income")\
         .filter(extract('year', Transaction.date) == year)\
-        .scalar() or 0
+        .scalar() or Decimal("0.00")
 
     ytd_expense = db.session.query(func.sum(Transaction.amount))\
         .filter(Transaction.type == "expense")\
         .filter(extract('year', Transaction.date) == year)\
-        .scalar() or 0
+        .scalar() or Decimal("0.00")
 
     ytd_savings = db.session.query(func.sum(Transaction.amount))\
         .filter(Transaction.type == "transfer")\
         .filter(extract('year', Transaction.date) == year)\
-        .scalar() or 0
+        .scalar() or Decimal("0.00")
 
     net_ytd = ytd_income - ytd_expense
     savings_rate = round((ytd_savings / ytd_income * 100), 1) if ytd_income else 0
@@ -47,7 +47,7 @@ def dashboard():
         .filter(Transaction.type == "expense")\
         .filter(extract('year', Transaction.date) == year)\
         .filter(extract('month', Transaction.date) == month)\
-        .scalar() or 0
+        .scalar() or Decimal("0.00")
 
     # Category breakdown for selected month
     category_totals = db.session.query(
@@ -81,7 +81,7 @@ def dashboard():
         budget_percentage=budget_percentage,
         selected_month=month
     )
-
+    
 # Add transaction via AJAX
 @expense_tracker.route("/add", methods=["POST"])
 def add_record():
@@ -119,14 +119,12 @@ def add_record():
 
 
 # Delete transaction via AJAX
-@expense_tracker.route("/delete/<int:tx_id>", methods=["DELETE"])
+@expense_tracker.route("/delete/<int:tx_id>", methods=["POST"])
 def delete_record(tx_id):
-    tx = Transaction.query.get(tx_id)
-    if tx:
-        db.session.delete(tx)
-        db.session.commit()
-        return jsonify({"success": True})
-    return jsonify({"success": False}), 404
+    tx = Transaction.query.get_or_404(tx_id)
+    db.session.delete(tx)
+    db.session.commit()
+    return redirect(url_for("expense_tracker.view_all"))
 
 
 @expense_tracker.route("/all")
@@ -152,3 +150,23 @@ def add_transaction():
         return redirect(url_for("expense_tracker.dashboard"))
 
     return render_template("add_transaction.html", form=form)
+
+@expense_tracker.route("/edit/<int:tx_id>", methods=["GET"])
+def edit_record(tx_id):
+    tx = Transaction.query.get_or_404(tx_id)
+    categories = Category.query.all()
+    return render_template("edit_record.html", tx=tx, categories=categories)
+
+@expense_tracker.route("/edit/<int:tx_id>", methods=["POST"])
+def update_record(tx_id):
+    tx = Transaction.query.get_or_404(tx_id)
+
+    tx.date = datetime.strptime(request.form["date"], "%Y-%m-%d")
+    tx.amount = Decimal(request.form["amount"])
+    tx.description = request.form["description"]
+    tx.category_id = int(request.form["category"])
+    tx.type = request.form["type"]
+
+    db.session.commit()
+
+    return redirect(url_for("expense_tracker.view_all"))
