@@ -348,3 +348,102 @@ a:hover { background: #0a58ca; }
 @media (max-width: 480px) {
     .the-card { width: 95%; }
 }
+
+/* =========================
+   CAR MAINTENANCE CARD
+========================= */
+.car-card {
+    width: 95%;
+    max-width: 1200px;
+    padding: 30px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+/* =========================
+   CAR MAINTENANCE TABLE
+========================= */
+.car-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.car-table th,
+.car-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    vertical-align: top;
+}
+
+.car-table th {
+    background: #f0f0f0;
+}
+
+.car-table td ul {
+    margin: 0;
+    padding-left: 18px;
+    display: inline-block;
+    text-align: left;
+}
+
+.empty-row {
+    text-align: center;
+    padding: 15px;
+}
+
+/* =========================
+   CAR MAINTENANCE ACTION BUTTONS
+========================= */
+.car-table .actions-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;       /* spacing between buttons */
+}
+
+.car-table .actions-cell form {
+    display: inline;  /* ensures form doesn't create a new line */
+    margin: 0;
+}
+
+.car-table .actions-cell .btn {
+    display: inline-block;
+    width: auto;
+    font-size: 14px;
+    padding: 8px 14px;
+}
+
+/* =========================
+   CAR FORM STYLING
+========================= */
+.car-form {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.car-form input,
+.car-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    text-align: center;
+}
+
+.car-form textarea {
+    resize: vertical;
+}
+
+/* =========================
+   ADD BUTTON SPACING
+========================= */
+.add-btn {
+    margin-bottom: 15px;
+}

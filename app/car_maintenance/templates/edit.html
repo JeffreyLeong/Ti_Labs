@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="the-card car-card">
+    <h2>Edit Car Maintenance</h2>
+
+    <form method="POST" class="nice-form car-form">
+
+        <label>Date</label>
+        <input type="date" name="date" value="{{ record.date }}" required>
+
+        <label>Mileage</label>
+        <input type="number" name="mileage" value="{{ record.mileage }}" required>
+
+        <label>Service</label>
+        <textarea name="service" rows="4" required>{{ record.service }}</textarea>
+
+        <label>Amount Paid</label>
+        <input type="number" name="amount_paid" step="0.01" value="{{ record.amount_paid }}" required>
+
+        <label>Service Provider</label>
+        <input type="text" name="service_provider" value="{{ record.service_provider }}">
+
+        <div class="form-actions">
+            <button type="submit" class="btn">Update</button>
+            <a href="{{ url_for('car_maintenance.index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

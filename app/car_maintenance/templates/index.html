@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="the-card car-card">
+    <h2>Car Maintenance Records</h2>
+
+    <a href="{{ url_for('car_maintenance.add') }}" class="btn add-btn">
+        Add Record
+    </a>
+
+    <table class="car-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Mileage</th>
+                <th>Service</th>
+                <th>Amount Paid</th>
+                <th>Service Provider</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.date }}</td>
+                <td>{{ record.mileage }}</td>
+                <td>
+                    <ul>
+                        {% for service in record.service.split('\n') %}
+                            {% if service.strip() %}
+                                <li>{{ service.strip() }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>${{ record.amount_paid }}</td>
+                <td>{{ record.service_provider }}</td>
+                <td class="actions-cell">
+                    <a href="{{ url_for('car_maintenance.edit', id=record.id) }}" class="btn action-btn">
+                        Edit
+                    </a>
+
+                    <form action="{{ url_for('car_maintenance.delete', id=record.id) }}" method="POST" class="inline-form">
+                        <button type="submit" class="btn action-btn">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="empty-row">
+                    No records found.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
