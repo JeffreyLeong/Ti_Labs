@@ -1,9 +1,11 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # loads .env variables
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, "app.db")
+    SECRET_KEY = os.getenv("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
+    SQLALCHEMY_DATABASE_URI = f"postgresql://ti_labs_user:{os.getenv('DB_PASSWORD')}@localhost/ti_labs_db"
