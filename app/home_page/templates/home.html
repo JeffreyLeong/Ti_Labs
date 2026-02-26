@@ -3,12 +3,19 @@
 {% block content %}
 
 <h1>Welcome to Ti Labs</h1>
-<p>Select a mini-site: </p>
 
-<div class = "menu">
-    <a href="{{ url_for('tip_calculator.index') }}">Tip Calculator</a>
-    <a href="{{ url_for('car_maintenance.index') }}">Car Maintenance</a>
-    <a href="{{ url_for('expense_tracker.index') }}">Expense Tracker</a>
+{% if current_user.is_authenticated %}
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('auth.logout') }}" class="btn">Log Out</a>
+    </div>
+{% endif %}
+
+<p>Select a mini-site:</p>
+
+<div class="menu">
+    <a href="{{ url_for('tip_calculator.index') }}" class="btn">Tip Calculator</a>
+    <a href="{{ url_for('car_maintenance.index') }}" class="btn">Car Maintenance</a>
+    <a href="{{ url_for('expense_tracker.dashboard') }}" class="btn">Expense Tracker</a>
 </div>
 
 {% endblock %}

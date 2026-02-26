@@ -447,3 +447,19 @@ a:hover { background: #0a58ca; }
 .add-btn {
     margin-bottom: 15px;
 }
+
+/* =========================
+   HOME PAGE MENU BUTTONS
+========================= */
+.menu {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;
+    gap: 15px;                /* space between buttons */
+    margin-top: 20px;
+}
+
+.menu .btn {
+    width: 220px;             /* uniform width for menu buttons */
+    text-align: center;
+}

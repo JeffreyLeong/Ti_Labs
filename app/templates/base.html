@@ -1,18 +1,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ "Ti-Labs" }}</title>
+    <title>Ti-Labs</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    {% if request.endpoint != 'home_page.index' %}
     <nav>
-        {% if request.endpoint != 'home_page.index' %}
-            <a href="{{ url_for('home_page.index') }}" class="btn">Home</a>
-        {% endif %}
+        <a href="{{ url_for('home_page.index') }}" class="btn">Home</a>
         <a href="{{ url_for('tip_calculator.index') }}" class="btn">Tip Calculator</a>
         <a href="{{ url_for('car_maintenance.index') }}" class="btn">Car Maintenance</a>
         <a href="{{ url_for('expense_tracker.dashboard') }}" class="btn">Expense Tracker</a>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.logout') }}" class="btn">Log Out</a>
+        {% endif %}
     </nav>
+    {% endif %}
 
     {% block content %}{% endblock %}
 
