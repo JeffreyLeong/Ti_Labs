@@ -4,9 +4,10 @@ from app.expense_tracker.models import Category
 categories = sorted([
     "Car",
     "Dogs",
+    "Eating Out",
     "Education & Loans",
     "Entertainment & Subscriptions",
-    "Food",
+    "Groceries",
     "Health",
     "Housing",
     "Income",
