@@ -11,7 +11,7 @@ class BaseConfig:
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=5)
 
 class DevConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = f"postgresql://admin:{os.getenv('DEV_DB_PASSWORD')}@localhost/ti_labs_db"
+    SQLALCHEMY_DATABASE_URI = f"postgresql://admin1:{os.getenv('DEV_DB_PASSWORD')}@localhost/ti_labs_db"
 
 class ProdConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = f"postgresql://admin:{os.getenv('PROD_DB_PASSWORD')}@44.246.45.4/ti_labs_prod"
