@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, current_app
 from datetime import datetime
 from decimal import Decimal
 from app.extensions import db
@@ -21,7 +21,7 @@ def dashboard():
     # Get selected month from query param, default to current month
     month = request.args.get("month", default=now.month, type=int)
 
-    monthly_budget = 4000  # hardcoded
+    monthly_budget = current_app.config["MONTHLY_EXPENSE_BUDGET"]
 
     # YTD totals
     ytd_income = db.session.query(func.sum(Transaction.amount))\
@@ -129,8 +129,25 @@ def delete_record(tx_id):
 
 @expense_tracker.route("/all")
 def view_all():
-    transactions = Transaction.query.order_by(Transaction.date.desc()).all()
-    return render_template("view_all.html", transactions=transactions)
+    search = request.args.get("search", "")
+    page = request.args.get("page", 1, type=int)
+
+    query = Transaction.query
+
+    if search:
+        query = query.filter(
+            Transaction.description.ilike(f"%{search}%")
+        )
+
+    transactions = query.order_by(
+        Transaction.date.desc()
+    ).paginate(page=page, per_page=50)
+
+    return render_template(
+        "view_all.html",
+        transactions=transactions,
+        search=search
+    )
 
 
 @expense_tracker.route("/add-form", methods=["GET", "POST"])

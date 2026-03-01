@@ -2,6 +2,12 @@
 
 {% block content %}
 <h1>All Transactions</h1>
+<form method="GET" style="margin-bottom:20px;">
+    <input type="text" name="search"
+           placeholder="Search description..."
+           value="{{ search }}">
+    <button type="submit">Search</button>
+</form>
 <table border="1" style="width:80%; margin:0 auto;">
     <tr>
         <th>Date</th>
@@ -11,7 +17,7 @@
         <th>Type</th>
         <th>Actions</th>
     </tr>
-    {% for tx in transactions %}
+    {% for tx in transactions.items %}
     <tr>
         <td>{{ tx.date.strftime('%Y-%m-%d') }}</td>
         <td>{{ tx.description }}</td>
@@ -34,6 +40,29 @@
         </td>
     </tr>
     {% endfor %}
+
+{% if transactions.items|length == 0 %}
+<tr>
+    <td colspan="6" style="text-align:center;">No transactions found.</td>
+</tr>
+{% endif %}
+
+
 </table>
+<div style="margin-top:20px;">
+    {% if transactions.has_prev %}
+        <a href="{{ url_for('expense_tracker.view_all',
+                            page=transactions.prev_num,
+                            search=search) }}">Previous</a>
+    {% endif %}
+
+    Page {{ transactions.page }} of {{ transactions.pages }}
+
+    {% if transactions.has_next %}
+        <a href="{{ url_for('expense_tracker.view_all',
+                            page=transactions.next_num,
+                            search=search) }}">Next</a>
+    {% endif %}
+</div>
 
 {% endblock %}

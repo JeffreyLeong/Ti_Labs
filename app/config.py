@@ -1,11 +1,23 @@
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
-load_dotenv()  # loads .env variables
+load_dotenv()
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
-class Config:
+class BaseConfig:
     SECRET_KEY = os.getenv("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = f"postgresql://admin:{os.getenv('DB_PASSWORD')}@localhost/ti_labs_new"
+    MONTHLY_EXPENSE_BUDGET = 9000
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=5)
+
+class DevConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI = f"postgresql://admin:{os.getenv('DEV_DB_PASSWORD')}@localhost/ti_labs_db"
+
+class ProdConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI = f"postgresql://admin:{os.getenv('PROD_DB_PASSWORD')}@44.246.45.4/ti_labs_prod"
+
+# Select config based on environment
+if os.getenv("FLASK_ENV") == "production":
+    CurrentConfig = ProdConfig
+else:
+    CurrentConfig = DevConfig

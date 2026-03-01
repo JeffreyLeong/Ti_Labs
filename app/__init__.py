@@ -1,19 +1,13 @@
 from flask import Flask, session
 from flask_login import current_user
-from datetime import timedelta
-
 from app.extensions import db, migrate
-from app.config import Config
 from app.auth import login_manager
 from app.expense_tracker.cli import init_categories
-
+from app.config import CurrentConfig
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)
-
-    # Session timeout (30 minutes)
-    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
+    app.config.from_object(CurrentConfig)
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -38,13 +32,11 @@ def create_app():
     @app.before_request
     def require_login():
         from flask import redirect, request, url_for
-
         allowed_routes = ["auth.login", "static"]
-
         if request.endpoint not in allowed_routes and not current_user.is_authenticated:
             return redirect(url_for("auth.login"))
 
-    # Rolling 30-minute inactivity timeout
+    # Rolling session timeout
     @app.before_request
     def refresh_session():
         if current_user.is_authenticated:
