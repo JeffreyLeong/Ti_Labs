@@ -14,7 +14,7 @@ class DevConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = f"postgresql://ti_labs_user:{os.getenv('DEV_DB_PASSWORD')}@localhost/ti_labs_db"
 
 class ProdConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = f"postgresql://admin:{os.getenv('PROD_DB_PASSWORD')}@44.246.45.4/ti_labs_new"
+    SQLALCHEMY_DATABASE_URI = f"postgresql://admin:{os.getenv('PROD_DB_PASSWORD')}@localhost/ti_labs_new"
 
 # Select config based on environment
 if os.getenv("FLASK_ENV") == "production":
